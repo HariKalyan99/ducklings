@@ -1,26 +1,49 @@
 # @singing-duck/capture-duck
 
-Lightweight error capture for browser and Node.js apps.
+<p align="center">
+  <img src="./assets/duck-logo.png" alt="Singing Duck logo" width="140" />
+</p>
 
-## Install
+<p align="center">
+  <strong>Version:</strong> 0.1.6 &nbsp;|&nbsp; <strong>License:</strong> MIT
+</p>
+
+<p align="center">
+  <strong>Production-friendly error capture for browser and Node.js applications.</strong><br />
+  Capture structured errors, enrich context, and forward to your observability pipeline.
+</p>
+
+---
+
+## Why use capture-duck?
+
+- Unified error capture API for both frontend and backend.
+- Optional PostHog integration for browser telemetry.
+- Pluggable backend reporter (`DB`, queue, HTTP, and more).
+- Structured stack parsing with safe client-facing error responses.
+- Lightweight setup with Node.js `>=18`.
+
+## Installation
 
 ```bash
 npm install @singing-duck/capture-duck
 ```
 
-Optional (browser PostHog integration only):
+Optional dependency (browser PostHog integration):
 
 ```bash
 npm install posthog-js
 ```
 
-## Exports
+## Package exports
 
-- `@singing-duck/capture-duck`: stack parsing helpers
-- `@singing-duck/capture-duck/browser`: browser error capture + global handlers
-- `@singing-duck/capture-duck/node`: backend capture factory + safe client response helper
+| Export | Purpose |
+| --- | --- |
+| `@singing-duck/capture-duck` | Stack parsing helpers |
+| `@singing-duck/capture-duck/browser` | Browser error capture + global handlers |
+| `@singing-duck/capture-duck/node` | Backend capture factory + safe client response helper |
 
-## Quick Start (Browser)
+## Quick start: Browser
 
 ```javascript
 import posthog from "posthog-js";
@@ -57,12 +80,13 @@ if (out.ingest?.ok) {
 }
 ```
 
-Browser behavior:
-- Sends ingest payload with `fetch` JSON when `ingestUrl` is set
-- Installs global handlers for `window.onerror` and `window.onunhandledrejection`
-- Global handler capture is fire-and-forget
+### Browser behavior
 
-## Quick Start (Node / Backend)
+- Sends ingest payload with `fetch` JSON when `ingestUrl` is set.
+- Installs global handlers for `window.onerror` and `window.onunhandledrejection`.
+- Global handler capture is fire-and-forget.
+
+## Quick start: Node / Backend
 
 ```javascript
 import {
@@ -108,9 +132,10 @@ app.post("/orders", async (req, res) => {
 });
 ```
 
-## API Overview
+## API overview
 
-Browser:
+### Browser API
+
 - `initErrorTracking(options)`
   - `ingestUrl?: string | null`
   - `getIngestHeaders?: () => Record<string, string> | Promise<Record<string, string>>`
@@ -119,26 +144,28 @@ Browser:
   - `posthogClient?: object` (already initialized)
   - `posthog?: { apiKey: string; host?: string; ... }` (lazy init)
 - `captureDuck(error, extra?)`
-  - returns `{ posthog, ingest }`
+  - Returns `{ posthog, ingest }`
 
-Node:
+### Node API
+
 - `createCaptureDuck(options)`
-  - required: `report(payload)`
-  - optional: `environment`, `readSnippet`, `defaultUserAgent`
-  - returns `captureDuck(error, extra?)`
+  - Required: `report(payload)`
+  - Optional: `environment`, `readSnippet`, `defaultUserAgent`
+  - Returns `captureDuck(error, extra?)`
 - `buildClientErrorResponse(error, options?)`
-  - safe error payload for frontend clients (no stack in production by default)
+  - Safe payload for frontend clients (no stack in production by default)
 
-Core:
+### Core API
+
 - `parseStackTrace(stack)` for structured stack frames
 
-## Security Notes
+## Security
 
-- Use only public PostHog keys (`phc_...`) in browser code
-- Keep secrets/tokens on server side
-- Use `beforeSend` to strip sensitive fields before ingest
+- Use only public PostHog keys (`phc_...`) in browser code.
+- Keep secrets and tokens on server side.
+- Use `beforeSend` to strip sensitive fields before ingest.
 
-## Maintainer Notes
+## Maintainer commands
 
 ```bash
 npm test
