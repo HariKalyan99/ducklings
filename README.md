@@ -10,10 +10,13 @@
 
 <p align="center">
   <strong>Production-friendly error capture for browser and Node.js applications.</strong><br />
-  Capture structured errors, enrich context, and forward to your observability pipeline.
+  Capture structured errors, enrich context, and forward to your observability pipeline.<br />
+  Supports server dry-run validation before side effects and transaction-based DB rollbacks.
 </p>
 
 ---
+
+> **Reliability note:** Supports server dry-run validation before side effects, plus transaction-based DB rollbacks so failed paths do not leave partial writes.
 
 ## Why use capture-duck?
 
